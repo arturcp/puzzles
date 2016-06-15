@@ -1,10 +1,10 @@
-require 'matrix'
 require 'byebug'
 require_relative 'lib/extension'
 require_relative 'lib/initial_setup'
+require_relative 'lib/table'
 
 def build_initial_matrix
-  Matrix.rows([
+  Table.rows([
     ['', 'House 1', 'House 2', 'House 3', 'House 4', 'House 5'],
     ['Wall color', '', '', '', '', ''],
     ['Nationality', '', '', '', '', ''],
