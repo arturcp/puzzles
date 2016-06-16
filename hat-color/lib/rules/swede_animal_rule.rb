@@ -1,4 +1,4 @@
-class SwedeAnimalRule
+class SwedeAnimalRule < BaseRule
   def process(matrix)
   end
 

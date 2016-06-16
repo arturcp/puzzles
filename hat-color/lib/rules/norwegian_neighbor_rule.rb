@@ -1,4 +1,4 @@
-class NorwegianNeighborRule
+class NorwegianNeighborRule < BaseRule
   def process(matrix)
   end
 

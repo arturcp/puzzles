@@ -1,4 +1,4 @@
-class CatNeighborRule
+class CatNeighborRule < BaseRule
   def process(matrix)
   end
 

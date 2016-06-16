@@ -1,4 +1,4 @@
-class RedWallsRule
+class RedWallsRule < BaseRule
   def process(matrix)
   end
 

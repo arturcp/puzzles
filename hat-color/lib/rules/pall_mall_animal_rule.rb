@@ -1,4 +1,4 @@
-class PallMallAnimalRule
+class PallMallAnimalRule < BaseRule
   def process(matrix)
   end
 

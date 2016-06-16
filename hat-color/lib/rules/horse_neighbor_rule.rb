@@ -1,4 +1,4 @@
-class HorseNeighborRule
+class HorseNeighborRule < BaseRule
   def process(matrix)
   end
 

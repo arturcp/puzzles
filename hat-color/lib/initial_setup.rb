@@ -4,21 +4,21 @@ Dir.glob(File.dirname(File.absolute_path(__FILE__)) + '/rules/*') { |file| requi
 class InitialSetup
   def self.rules
     [
-      RedWallsRule,
-      SwedeAnimalRule,
-      DaneDrinkRule,
-      GreenWhiteRule,
-      GreenWallDrinkRule,
-      PallMallAnimalRule,
-      YellowWallCigarRule,
-      CenterHouseDrinkRule,
-      NorwegianRule,
-      CatNeighborRule,
-      HorseNeighborRule,
-      BlueMasterDrinkRule,
-      GermanCigarRule,
-      NorwegianNeighborRule,
-      BlendSmokerNeighborRule
+      RedWallsRule.new,
+      SwedeAnimalRule.new,
+      DaneDrinkRule.new,
+      GreenWhiteRule.new,
+      GreenWallDrinkRule.new,
+      PallMallAnimalRule.new,
+      YellowWallCigarRule.new,
+      CenterHouseDrinkRule.new,
+      NorwegianRule.new,
+      CatNeighborRule.new,
+      HorseNeighborRule.new,
+      BlueMasterDrinkRule.new,
+      GermanCigarRule.new,
+      NorwegianNeighborRule.new,
+      BlendSmokerNeighborRule.new
     ]
   end
 end

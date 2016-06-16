@@ -1,4 +1,4 @@
-class BlendSmokerNeighborRule
+class BlendSmokerNeighborRule < BaseRule
   def process(matrix)
   end
 

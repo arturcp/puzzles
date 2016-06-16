@@ -1,4 +1,4 @@
-class GermanCigarRule
+class GermanCigarRule < BaseRule
   def process(matrix)
   end
 

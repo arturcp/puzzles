@@ -1,4 +1,4 @@
-class DaneDrinkRule
+class DaneDrinkRule < BaseRule
   def process(matrix)
   end
 

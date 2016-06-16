@@ -1,4 +1,4 @@
-class CenterHouseDrinkRule
+class CenterHouseDrinkRule < BaseRule
   def process(matrix)
     if matrix[4, 3].empty?
       matrix[4, 3] = 'Milk'

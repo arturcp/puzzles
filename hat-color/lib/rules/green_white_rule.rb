@@ -1,4 +1,4 @@
-class GreenWhiteRule
+class GreenWhiteRule < BaseRule
   def process(matrix)
   end
 

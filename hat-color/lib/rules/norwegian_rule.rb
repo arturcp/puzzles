@@ -1,4 +1,4 @@
-class NorwegianRule
+class NorwegianRule < BaseRule
   def process(matrix)
     if matrix[2, 1].empty?
       matrix[2, 1] = 'Norwegian'

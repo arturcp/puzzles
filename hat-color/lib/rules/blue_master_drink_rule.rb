@@ -1,4 +1,4 @@
-class BlueMasterDrinkRule
+class BlueMasterDrinkRule < BaseRule
   def process(matrix)
   end
 
