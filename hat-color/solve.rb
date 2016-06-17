@@ -50,6 +50,17 @@ def apply_initial_rules(matrix, rules)
   end
 end
 
+# iterate on the rules and call it recursively on each candidate.
+#
+# After each candidate apply method call, it is possible I will need to call
+# the rule's process because some of the rules can write two things in one
+# row. The apply will write one of them, but the other must follow the rule
+# process normally
+def fill_in_matrix(matrix, rules)
+  # If I call process, how can I prevent infinite loop? It will return the
+  # candidates all over again
+end
+
 def start
   matrix = build_initial_matrix
   rules = InitialSetup.rules

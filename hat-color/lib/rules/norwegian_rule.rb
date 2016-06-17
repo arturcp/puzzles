@@ -1,7 +1,8 @@
 class NorwegianRule < BaseRule
+  NATIONALITY = 'Norwegian'
   def process(matrix)
-    if matrix[2, 1].empty?
-      matrix[2, 1] = 'Norwegian'
+    if matrix[Table::NATIONALITY_LINE, Table::HOUSE_1].empty?
+      matrix[Table::NATIONALITY_LINE, Table::HOUSE_1] = NATIONALITY
       true
     else
       false
@@ -9,6 +10,6 @@ class NorwegianRule < BaseRule
   end
 
   def to_s
-    "The Norwegian lives in the first house"
+    'The Norwegian lives in the first house'
   end
 end

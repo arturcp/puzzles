@@ -1,5 +1,9 @@
 class HorseNeighborRule < BaseRule
+  ANIMAL = 'Horse'
+  CIGAR = 'Dunhill'
+
   def process(matrix)
+    neighbor(matrix, 'animal', 'cigar')
   end
 
   def to_s

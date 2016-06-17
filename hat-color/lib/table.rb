@@ -7,8 +7,14 @@ class Table
   COLOR_LINE = 1
   NATIONALITY_LINE = 2
   CIGAR_LINE = 3
-  BEVERAGE_LINE = 4
+  DRINK_LINE = 4
   ANIMAL_LINE = 5
+
+  HOUSE_1 = 1
+  HOUSE_2 = 2
+  HOUSE_3 = 3
+  HOUSE_4 = 4
+  HOUSE_5 = 5
 
   def_delegators :@matrix, :row, :column_count, :row_count, :rows, :[], :[]=
 

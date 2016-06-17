@@ -1,7 +1,9 @@
 class CenterHouseDrinkRule < BaseRule
+  DRINK = 'Milk'
+
   def process(matrix)
-    if matrix[4, 3].empty?
-      matrix[4, 3] = 'Milk'
+    if matrix[Table::DRINK_LINE, Table::HOUSE_3].empty?
+      matrix[Table::DRINK_LINE, Table::HOUSE_3] = DRINK
       true
     else
       false
@@ -10,6 +12,6 @@ class CenterHouseDrinkRule < BaseRule
   end
 
   def to_s
-    "The man living in the center house drinks milk"
+    'The man living in the center house drinks milk'
   end
 end
