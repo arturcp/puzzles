@@ -6,10 +6,10 @@ class GreenWhiteRule < BaseRule
     primary_column = matrix.column_with(content: COLOR_1, line: Table::COLOR_LINE)
     secondary_column = matrix.column_with(content: COLOR_2, line: Table::COLOR_LINE)
 
-    if primary_column && primary_column < 5 && !secondary_column
+    if primary_column && primary_column < Table::HOUSE_5 && !secondary_column && matrix[Table::COLOR_LINE, primary_column + 1].empty?
       apply(matrix, Table::COLOR_LINE, primary_column + 1, COLOR_2)
       true
-    elsif secondary_column && secondary_column > 1 && !primary_column
+    elsif secondary_column && secondary_column > Table::HOUSE_1 && !primary_column && matrix[Table::COLOR_LINE, secondary_column - 1].empty?
       apply(matrix, Table::COLOR_LINE, secondary_column - 1, COLOR_1)
       true
     else
