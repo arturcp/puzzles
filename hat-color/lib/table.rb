@@ -30,4 +30,23 @@ class Table
   def column_with(content:, line:)
     @matrix.row(line).to_a.index(content)
   end
+
+  def clone
+    Marshal.load(Marshal.dump(self))
+  end
+
+  def complete?
+    complete = true
+    @matrix.column_count.times do |j|
+      next unless complete
+
+      @matrix.row_count.times do |i|
+        next unless complete
+
+        complete = false if @matrix[i, j] == ''
+      end
+    end
+
+    complete
+  end
 end

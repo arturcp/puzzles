@@ -6,36 +6,42 @@ class BaseRule
     :primary, :primary_line, :secondary, :secondary_line
 
   def combine(matrix, attribute1, attribute2)
+    puts "combine for #{self.to_s}"
     parse_attributes(attribute1, attribute2)
 
-    if column = matrix.column_with(content: primary, line: primary_line) && matrix[secondary_line, column] == ''
-      apply(matrix, primary_line, column, primary)
+    primary_column = matrix.column_with(content: primary, line: primary_line)
+    secondary_column = matrix.column_with(content: secondary, line: secondary_line)
+
+    if primary_column && !secondary_column && matrix[secondary_line, primary_column].empty?
+      apply(matrix, secondary_line, primary_column, secondary)
       true
-    elsif column = matrix.column_with(content: secondary, line: secondary_line) && matrix[primary_line, column] == ''
-      apply(matrix, secondary_line, column, secondary)
+    elsif secondary_column && !primary_column && matrix[primary_line, secondary_column].empty?
+      apply(matrix, primary_line, secondary_column, primary)
       true
     else
-      self.candidates = candidates(matrix, primary_line, primary)
+      self.candidates = find_candidates(matrix, primary_line, primary)
       false
     end
   end
 
   def neighbor(matrix, attribute1, attribute2)
+    puts "neighbor for #{self.to_s}"
     parse_attributes(attribute1, attribute2)
 
     column = matrix.column_with(content: primary, line: primary_line)
+    secondary_column = matrix.column_with(content: secondary, line: secondary_line)
 
-    if column == Table::HOUSE_1 && matrix[secondary, Table::HOUSE_2] == ''
+    if column == Table::HOUSE_1 && matrix[secondary_line, Table::HOUSE_2].empty? && !secondary_column
       apply(matrix, secondary_line, column, secondary)
       true
-    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column - 1] == '' && matrix[secondary_line, column + 1] != ''
+    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column - 1].empty? && matrix[secondary_line, column + 1] != '' && !secondary_column
       apply(matrix, secondary_line, column - 1, secondary)
       true
-    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column + 1] == '' && matrix[secondary_line, column - 1] != ''
+    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column + 1].empty? && matrix[secondary_line, column - 1] != '' && !secondary_column
       apply(matrix, secondary_line, column + 1, secondary)
       true
     else
-      self.candidates = candidates(matrix, primary_line, primary)
+      self.candidates = find_candidates(matrix, primary_line, primary)
       false
     end
   end
@@ -46,37 +52,31 @@ class BaseRule
     matrix[line, column] = value
   end
 
+  private
+
+  def parse_attributes(attribute1, attribute2)
+    self.primary = eval("#{self.class}::#{attribute1.upcase}")
+    self.primary_line = eval("Table::#{attribute1.upcase}_LINE")
+    self.secondary = eval("#{self.class}::#{attribute2.upcase}")
+    self.secondary_line = eval("Table::#{attribute2.upcase}_LINE")
+  end
+
+  protected
+
   # All Rules must have the candidates method. It contains the list of possible
   # solutions to the puzzle, respecting the given rule
-  def candidates(matrix, line, value)
+  def find_candidates(matrix, line, value, invalid_columns = [])
+    puts "find candidates for #{self.to_s}"
     list = []
 
     matrix.row(line).to_a.each_with_index do |column, index|
       list << {
         line: line,
-        column: index + 1,
+        column: index,
         value: value
-      } if column == ''
+      } if column.empty? && !invalid_columns.include?(index)
     end
 
     list
   end
-
-  private
-
-  def parse_attributes(attribute1, attribute2)
-    self.primary = eval("#{self.class}::#{attribute1.upcase}"),
-    self.primary_line = eval("Table::#{attribute1.upcase}_LINE"),
-    self.secondary = eval("#{self.class}::#{attribute2.upcase}"),
-    self.secondary_line = eval("Table::#{attribute2.upcase}_LINE")
-  end
-
-  # def parse(attribute1, attribute2)
-  #   @parse ||= {
-  #     primary: eval("#{self.class}::#{attribute1.upcase}"),
-  #     primary_line: eval("Table::#{attribute1.upcase}_LINE"),
-  #     secondary: eval("#{self.class}::#{attribute2.upcase}"),
-  #     secondary_line: eval("Table::#{attribute2.upcase}_LINE")
-  #   }
-  # end
 end
