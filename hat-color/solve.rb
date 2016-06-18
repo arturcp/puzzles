@@ -5,6 +5,7 @@ require_relative 'lib/initial_setup'
 require_relative 'lib/table'
 
 @result_matrix = nil
+@delay = 0.5
 
 def build_initial_matrix
   Table.rows([
@@ -42,6 +43,7 @@ def apply_initial_rules(matrix, rules)
   failed_rules = []
   rules.each do |rule|
     if rule.process(matrix)
+      puts "#{rule} applied".green
       rule.status = :applied
     else
       failed_rules << rule
@@ -62,16 +64,18 @@ end
 # row. The apply will write one of them, but the other must follow the rule
 # process normally
 def fill_in_matrix(matrix, rules)
-  while !@result_matrix && rule = rules.shift
+  current_rules = rules.dup
+  while !@result_matrix && rule = current_rules.shift
     rule_name = rule.to_s.yellow
     puts ''
     puts "trying rule #{rule_name} with #{rule.candidates.count} candidates"
-    sleep(1)
+    sleep(@delay)
 
     index = 0
     current_candidates = rule.candidates.dup
+    all_candidates_failed = true
     while !@result_matrix && candidate = current_candidates.shift
-      print "* Candidate #{index.to_s.magenta}: #{candidate.inspect}... "
+      print "* [#{rule.to_s.yellow}] Candidate #{index.to_s.magenta}: #{candidate.inspect}... "
       index += 1
 
       m = matrix.clone
@@ -90,20 +94,22 @@ def fill_in_matrix(matrix, rules)
       rule.apply(m, line, column, candidate[:value])
 
       if rule.process(m)
+        all_candidates_failed = false
+
         puts '___________________________________________________'
         print_matrix(m)
         puts '___________________________________________________'
 
-        if rules.empty?
+        if current_rules.empty?
           puts 'FIM'
           @result_matrix = m if m.complete?
         else
           puts '++ Starting recursion ++'
-          fill_in_matrix(m, rules)
+          fill_in_matrix(m, current_rules)
         end
       else
-        puts 'process failed'
-        sleep(1)
+        puts 'Process failed'.red
+        sleep(@delay)
       end
     end
   end

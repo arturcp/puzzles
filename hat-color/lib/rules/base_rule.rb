@@ -29,13 +29,13 @@ class BaseRule
     column = matrix.column_with(content: primary, line: primary_line)
     secondary_column = matrix.column_with(content: secondary, line: secondary_line)
 
-    if column == Table::HOUSE_1 && matrix[secondary_line, Table::HOUSE_2].empty? && !secondary_column
-      apply(matrix, secondary_line, column, secondary)
+    if column && column == Table::HOUSE_1 && matrix[secondary_line, Table::HOUSE_2].empty? && !secondary_column
+      apply(matrix, secondary_line, Table::HOUSE_2, secondary)
       true
-    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column - 1].empty? && matrix[secondary_line, column + 1] != '' && !secondary_column
+    elsif column && column != Table::HOUSE_1 && matrix[secondary_line, column - 1].empty? && !matrix[secondary_line, column + 1] != '' && !secondary_column
       apply(matrix, secondary_line, column - 1, secondary)
       true
-    elsif column && column != Table::HOUSE_1 && column != Table::HOUSE_5 && matrix[secondary_line, column + 1].empty? && matrix[secondary_line, column - 1] != '' && !secondary_column
+    elsif column && column != Table::HOUSE_5 && matrix[secondary_line, column + 1].empty? && matrix[secondary_line, column - 1] != '' && !secondary_column
       apply(matrix, secondary_line, column + 1, secondary)
       true
     else
@@ -47,6 +47,8 @@ class BaseRule
   # All Rules must have the apply method. It is used on the `process`
   # method and also when a candidate is being applied in the matrix.
   def apply(matrix, line, column, value)
+    # debugger if value == 'Blend' && column == Table::HOUSE_2 && matrix[1, 1] == 'Yellow'
+    debugger if matrix[1, 1] == 'Yellow'
     matrix[line, column] = value
   end
 
