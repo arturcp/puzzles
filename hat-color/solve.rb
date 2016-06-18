@@ -5,7 +5,7 @@ require_relative 'lib/initial_setup'
 require_relative 'lib/table'
 
 @result_matrix = nil
-@delay = 0.5
+@delay = 0
 
 def build_initial_matrix
   Table.rows([
@@ -66,14 +66,19 @@ end
 def fill_in_matrix(matrix, rules)
   current_rules = rules.dup
   while !@result_matrix && rule = current_rules.shift
+    if rule.candidates.count == 0
+      puts 'No candidates...'
+      next
+    end
+
     rule_name = rule.to_s.yellow
     puts ''
-    puts "trying rule #{rule_name} with #{rule.candidates.count} candidates"
+    puts "Trying rule #{rule_name} with #{rule.candidates.count} candidates"
     sleep(@delay)
 
     index = 0
+    failure_count = 0
     current_candidates = rule.candidates.dup
-    all_candidates_failed = true
     while !@result_matrix && candidate = current_candidates.shift
       print "* [#{rule.to_s.yellow}] Candidate #{index.to_s.magenta}: #{candidate.inspect}... "
       index += 1
@@ -83,7 +88,13 @@ def fill_in_matrix(matrix, rules)
       column = candidate[:column]
 
       if m[line, column] != ''
+        failure_count += 1
         print "#{m[line, column]} is not blank. #{"Failed".red}"
+        puts ''
+        next
+      elsif m.column_with(content: candidate[:value], line: line)
+        failure_count += 1
+        print "#{candidate[:value]} is already used. #{"Failed".red}"
         puts ''
         next
       else
@@ -94,23 +105,27 @@ def fill_in_matrix(matrix, rules)
       rule.apply(m, line, column, candidate[:value])
 
       if rule.process(m)
-        all_candidates_failed = false
-
-        puts '___________________________________________________'
+        # puts '___________________________________________________'
         print_matrix(m)
-        puts '___________________________________________________'
+        # puts '___________________________________________________'
 
         if current_rules.empty?
-          puts 'FIM'
+          puts "EMPTY RULES".magenta
           @result_matrix = m if m.complete?
         else
-          puts '++ Starting recursion ++'
+          puts "++ Starting recursion to #{current_rules.first.to_s} ++"
+          # debugger if  rule.to_s == 'The Dane drinks tea'
           fill_in_matrix(m, current_rules)
         end
       else
+        failure_count += 1
         puts 'Process failed'.red
         sleep(@delay)
       end
+    end
+
+    if failure_count == rule.candidates.count
+      puts "#{"[ABORT]".red} - All candidates failed"
     end
   end
 end

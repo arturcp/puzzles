@@ -36,17 +36,13 @@ class Table
   end
 
   def complete?
-    complete = true
+    empty_items = 0
     @matrix.column_count.times do |j|
-      next unless complete
-
       @matrix.row_count.times do |i|
-        next unless complete
-
-        complete = false if @matrix[i, j] == ''
+        empty_items += 1 if @matrix[i, j] == ''
       end
     end
 
-    complete
+    empty_items == 1
   end
 end

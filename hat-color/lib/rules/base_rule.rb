@@ -47,8 +47,6 @@ class BaseRule
   # All Rules must have the apply method. It is used on the `process`
   # method and also when a candidate is being applied in the matrix.
   def apply(matrix, line, column, value)
-    # debugger if value == 'Blend' && column == Table::HOUSE_2 && matrix[1, 1] == 'Yellow'
-    debugger if matrix[1, 1] == 'Yellow'
     matrix[line, column] = value
   end
 
@@ -66,15 +64,16 @@ class BaseRule
   # All Rules must have the candidates method. It contains the list of possible
   # solutions to the puzzle, respecting the given rule
   def find_candidates(matrix, line, value, invalid_columns = [])
-    puts "find candidates for #{self.to_s}"
     list = []
 
     matrix.row(line).to_a.each_with_index do |column, index|
-      list << {
-        line: line,
-        column: index,
-        value: value
-      } if column.empty? && !invalid_columns.include?(index)
+      if column.empty? && !matrix.column_with(content: value, line: line) && !invalid_columns.include?(index)
+        list << {
+          line: line,
+          column: index,
+          value: value
+        }
+      end
     end
 
     list
