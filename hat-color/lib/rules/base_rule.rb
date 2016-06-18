@@ -6,7 +6,6 @@ class BaseRule
     :primary, :primary_line, :secondary, :secondary_line
 
   def combine(matrix, attribute1, attribute2)
-    puts "combine for #{self.to_s}"
     parse_attributes(attribute1, attribute2)
 
     primary_column = matrix.column_with(content: primary, line: primary_line)
@@ -25,7 +24,6 @@ class BaseRule
   end
 
   def neighbor(matrix, attribute1, attribute2)
-    puts "neighbor for #{self.to_s}"
     parse_attributes(attribute1, attribute2)
 
     column = matrix.column_with(content: primary, line: primary_line)

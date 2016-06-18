@@ -24,6 +24,8 @@ def print_rules(rules)
 end
 
 def print_matrix(matrix)
+  return unless matrix
+
   matrix.column_count.times do |j|
     matrix.row_count.times do |i|
       print "#{matrix[j, i].rjust(20, ' ')} "
@@ -67,10 +69,9 @@ def fill_in_matrix(matrix, rules)
     sleep(1)
 
     index = 0
-    while !@result_matrix && candidate = rule.candidates.shift
-      puts "applying candidate #{index} for rule #{rule}"
-      puts candidate.inspect
-      puts ''
+    current_candidates = rule.candidates.dup
+    while !@result_matrix && candidate = current_candidates.shift
+      print "* Candidate #{index.to_s.magenta}: #{candidate.inspect}... "
       index += 1
 
       m = matrix.clone
@@ -78,14 +79,15 @@ def fill_in_matrix(matrix, rules)
       column = candidate[:column]
 
       if m[line, column] != ''
-        puts "#{m[line, column]} is not blank"
+        print "#{m[line, column]} is not blank. #{"Failed".red}"
+        puts ''
         next
       else
-        puts 'OK'
+        print 'OK'.green
+        puts ''
       end
 
       rule.apply(m, line, column, candidate[:value])
-
 
       if rule.process(m)
         puts '___________________________________________________'
