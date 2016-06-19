@@ -12,3 +12,13 @@ To execute, go to the terminal and run:
 ```
 
 [Click here to see the puzzle running!](http://g.recordit.co/wwOJpYTAt6.gif)
+
+
+## 2. The Bridge
+
+The puzzle explanation is on this [TED ED video](https://www.youtube.com/watch?v=7yDmGnA8Hw0)
+
+To execute, go to the terminal and run:
+```
+  time ruby the-bridge-puzzle/solve.rb
+```
