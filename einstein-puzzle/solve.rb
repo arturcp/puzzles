@@ -4,22 +4,31 @@ require_relative 'lib/extension'
 require_relative 'lib/initial_setup'
 require_relative 'lib/table'
 
-@delay = 0
+LOG = false
+LAST_CELL_CONTENT = 'FISH'
 
-def build_initial_matrix
-  Table.rows([
-    ['-',           'House 1', 'House 2', 'House 3', 'House 4', 'House 5'],
-    ['Wall color',  '',        '',        '',        '',         ''],
-    ['Nationality', '',        '',        '',        '',         ''],
-    ['Cigar',       '',        '',        '',        '',         ''],
-    ['Beverage',    '',        '',        '',        '',         ''],
-    ['Animal',      '',        '',        '',        '',         '']
-  ])
+@loading_index = 0
+def print_loading
+  chars = "|/-\\"
+  print "\b"
+  print chars[@loading_index]
+  @loading_index += 1
+  @loading_index = 0 if @loading_index == chars.length
 end
 
 def print_rules(rules)
   rules.each_with_index do |rule, index|
     puts "#{index + 1}. #{rule.to_s}"
+  end
+end
+
+def log(message, type = 'puts')
+  return unless LOG
+
+  if type == 'puts'
+    puts message
+  elsif type == 'print'
+    print message
   end
 end
 
@@ -31,16 +40,13 @@ def apply_initial_rules(matrix, rules)
   failed_rules = []
   rules.each do |rule|
     if rule.process(matrix)
-      puts "#{rule} applied".green
       rule.status = :applied
     else
       failed_rules << rule
     end
   end
 
-  if failed_rules.length == rules.length
-    matrix.show
-  else
+  if failed_rules.length != rules.length
     apply_initial_rules(matrix, failed_rules)
   end
 end
@@ -52,19 +58,19 @@ end
 # row. The apply will write one of them, but the other must follow the rule
 # process normally
 def fill_in_matrix(matrix, rules)
+  print_loading
+
   current_rules = rules.dup
   while rule = current_rules.shift
     current_candidates = rule.find_candidates(matrix)
     next if current_candidates.count == 0
 
-    puts ''
-    puts "Trying rule #{rule.to_s.yellow} with #{current_candidates.count} candidates"
-    # sleep(@delay)
+    log ''
+    log "Trying rule #{rule.to_s.yellow} with #{current_candidates.count} candidates"
 
     index = 0
-
     while candidate = current_candidates.shift
-      print "* [#{rule.to_s.yellow}] Candidate #{index.to_s.magenta}: #{candidate.inspect}... "
+      log("* [#{rule.to_s.yellow}] Candidate #{index.to_s.magenta}: #{candidate.inspect}... ", 'print')
       index += 1
 
       current_matrix = matrix.clone
@@ -73,48 +79,53 @@ def fill_in_matrix(matrix, rules)
 
       candidate_content = current_matrix[line, column]
       if !candidate_content.empty? && candidate_content != candidate[:value]
-        puts "#{current_matrix[line, column]} is not blank. #{"Failed".red}"
-        next
+        log "#{current_matrix[line, column]} is not blank. #{"Failed".red}" and next
       elsif candidate_content != candidate[:value] && current_matrix.column_with(content: candidate[:value], line: line)
-        puts "#{candidate[:value]} is already used. #{"Failed".red}"
-        next
+        log "#{candidate[:value]} is already used. #{"Failed".red}" and next
       end
 
-      puts 'OK'.green
+      log 'OK'.green
       rule.apply(current_matrix, line, column, candidate[:value])
 
       if rule.process(current_matrix)
-        # puts '___________________________________________________'
-        # current_matrix.show
-        # puts '___________________________________________________'
-
         if current_rules.empty?
           if current_matrix.complete?
-            puts ''
-            current_matrix.show
-            puts ''
-            exit 1
+            show_result(current_matrix)
           end
         else
-          # puts "++ Starting recursion to #{current_rules.first.to_s} ++"
+          log "++ Starting recursion to #{current_rules.first.to_s} ++"
           fill_in_matrix(current_matrix, current_rules)
         end
       else
-        puts 'rule failed'.red
+        log 'rule failed'.red
       end
     end
   end
 end
 
-def start
-  matrix = build_initial_matrix
-  rules = InitialSetup.rules
-  matrix.show
+def show_result(matrix)
+  print "\b" unless LOG
   puts ''
-  print_rules(rules)
+  matrix.show do |_|
+    print "#{LAST_CELL_CONTENT.rjust(20, ' ')} ".green
+  end
+  puts ''
 
-  puts '*' * 100
+  exit 1
+end
+
+def start
+  matrix = InitialSetup.build_initial_matrix
+  rules = InitialSetup.rules
+
+  print_rules(rules)
   puts ''
+  matrix.show
+
+  puts ''
+  puts '*' * 130
+  puts ''
+  print 'Calculating....'.green
   apply_initial_rules(matrix, rules)
   rules = remove_used_rules(rules)
   fill_in_matrix(matrix, rules)

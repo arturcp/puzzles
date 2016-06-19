@@ -53,7 +53,12 @@ class Table
   def show
     @matrix.column_count.times do |j|
       @matrix.row_count.times do |i|
-        print "#{@matrix[j, i].rjust(20, ' ')} "
+        cell = @matrix[j, i]
+        if cell.empty?
+          block_given? ? yield(cell) : print("#{cell.rjust(20, ' ')} ")
+        else
+          print "#{cell.rjust(20, ' ')} "
+        end
       end
       puts ''
     end

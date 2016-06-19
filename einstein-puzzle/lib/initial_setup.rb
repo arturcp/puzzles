@@ -21,4 +21,16 @@ class InitialSetup
       BlendSmokerNeighborRule.new
     ]
   end
+
+  def self.build_initial_matrix
+    Table.rows([
+      ['-',           'House 1', 'House 2', 'House 3', 'House 4', 'House 5'],
+      ['Wall color',  '',        '',        '',        '',         ''],
+      ['Nationality', '',        '',        '',        '',         ''],
+      ['Cigar',       '',        '',        '',        '',         ''],
+      ['Beverage',    '',        '',        '',        '',         ''],
+      ['Animal',      '',        '',        '',        '',         '']
+    ])
+  end
+
 end
