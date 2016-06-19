@@ -13,12 +13,25 @@ class GreenWhiteRule < BaseRule
       apply(matrix, Table::COLOR_LINE, secondary_column - 1, COLOR_1)
       true
     else
-      self.candidates = find_candidates(matrix, Table::COLOR_LINE, COLOR_1, [Table::HOUSE_5])
       false
     end
   end
 
   def to_s
     'The house with green wall is directly to the left of the house with white walls'
+  end
+
+  private
+
+  def invalid_columns
+    [Table::HOUSE_5]
+  end
+
+  def candidate_line
+    Table::COLOR_LINE
+  end
+
+  def candidate_value
+    COLOR_1
   end
 end

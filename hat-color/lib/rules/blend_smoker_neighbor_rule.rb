@@ -3,7 +3,7 @@ class BlendSmokerNeighborRule < BaseRule
   DRINK = 'Water'
 
   def process(matrix)
-    combine(matrix, 'cigar', 'drink')
+    neighbor(matrix, 'cigar', 'drink')
   end
 
   def to_s

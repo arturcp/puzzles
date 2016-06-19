@@ -36,6 +36,10 @@ class Table
   end
 
   def complete?
+    empty_items == 1
+  end
+
+  def empty_items
     empty_items = 0
     @matrix.column_count.times do |j|
       @matrix.row_count.times do |i|
@@ -43,6 +47,15 @@ class Table
       end
     end
 
-    empty_items == 1
+    empty_items
+  end
+
+  def show
+    @matrix.column_count.times do |j|
+      @matrix.row_count.times do |i|
+        print "#{@matrix[j, i].rjust(20, ' ')} "
+      end
+      puts ''
+    end
   end
 end
