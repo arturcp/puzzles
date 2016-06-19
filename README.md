@@ -1,5 +1,10 @@
-# EINSTEIN-PUZZLE
-The puzzle explanation is on this [Ted Ed video](https://www.youtube.com/watch?v=1rDVz_Fb6HQ)
+# PUZZLES
+You will find in here algorithms to solve some of the TED ED's puzzles provided in their [youtube channel](https://www.youtube.com/channel/UCsooa4yRKGN_zEE8iknghZA).
+
+Each puzze is in its own folder and can be run separatedly.
+
+## 1. EINSTEIN-PUZZLE
+The puzzle explanation is on this [TED ED video](https://www.youtube.com/watch?v=1rDVz_Fb6HQ).
 
 To execute, go to the terminal and run:
 ```
