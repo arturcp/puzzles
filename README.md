@@ -22,3 +22,5 @@ To execute, go to the terminal and run:
 ```
   time ruby the-bridge-puzzle/solve.rb
 ```
+
+[Click here to see the puzzle running!](http://g.recordit.co/Cpn4F2knJa.gif)
