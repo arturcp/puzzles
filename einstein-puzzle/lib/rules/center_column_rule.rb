@@ -13,6 +13,9 @@ class CenterColumnRule < BaseRule
     end
   end
 
+  # This method is not necessary, but will remain here in case the
+  # apply_initial_rules method is not call, or the code will go into an
+  # infinite loop
   def find_candidates(matrix)
     line = row_index(matrix, @keys.first)
     column = matrix.column_count / 2
