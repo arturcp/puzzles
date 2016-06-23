@@ -16,7 +16,7 @@ class Table
   HOUSE_4 = 4
   HOUSE_5 = 5
 
-  def_delegators :@matrix, :row, :column_count, :row_count, :rows, :[], :[]=
+  def_delegators :@matrix, :row, :column_count, :row_count, :rows, :[], :[]=, :column
 
   def initialize(matrix)
     @matrix = matrix
